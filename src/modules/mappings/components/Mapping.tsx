@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IServer } from '../../servers';
-import { IMapping } from '../types';
+import { IMapping, IMappingMode } from '../types';
 import MappingJsonEditor from './MappingJsonEditor';
 import MappingBuilder from './MappingBuilder';
 import { Wrapper, Overlay } from './Mapping_styled';
@@ -18,80 +18,60 @@ interface IMappingProps {
   deleteMapping(): void;
 }
 
-interface IMappingState {
-  mode: 'builder' | 'json';
-}
+const Mapping: React.FC<IMappingProps> = ({
+  mappingId,
+  mapping,
+  isLoading,
+  syncWorkingCopy,
+  updateMapping,
+  deleteMapping,
+  initWorkingCopy,
+}) => {
+  const [mode, setMode] = React.useState<IMappingMode>('builder');
 
-export default class Mapping extends React.Component<
-  IMappingProps,
-  IMappingState
-> {
-  constructor(props: IMappingProps) {
-    super(props);
+  React.useEffect(() => {
+    initWorkingCopy();
+  }, [mappingId]);
 
-    this.state = {
-      mode: 'builder',
-    };
-  }
-
-  componentDidMount() {
-    this.props.initWorkingCopy();
-  }
-
-  componentDidUpdate(prevProps: IMappingProps) {
-    if (this.props.mappingId !== prevProps.mappingId) {
-      this.props.initWorkingCopy();
-    }
-  }
-
-  setBuilderMode = () => {
-    this.setState({ mode: 'builder' });
+  const setBuilderMode = () => {
+    setMode('builder');
   };
 
-  setJsonMode = () => {
-    this.setState({ mode: 'json' });
+  const setJsonMode = () => {
+    setMode('json');
   };
 
-  render() {
-    const {
-      mapping,
-      isLoading,
-      syncWorkingCopy,
-      updateMapping,
-      deleteMapping,
-    } = this.props;
-    const { mode } = this.state;
+  if (mapping === undefined) return null;
 
-    if (mapping === undefined) return null;
+  return (
+    <Wrapper>
+      {mode === 'builder' && (
+        <MappingBuilder
+          mapping={mapping}
+          isLoading={isLoading}
+          save={updateMapping}
+          sync={syncWorkingCopy}
+          deleteMapping={deleteMapping}
+          mode={mode}
+          setBuilderMode={setBuilderMode}
+          setJsonMode={setJsonMode}
+        />
+      )}
+      {mode === 'json' && (
+        <MappingJsonEditor
+          mapping={mapping}
+          isLoading={isLoading}
+          save={updateMapping}
+          sync={syncWorkingCopy}
+          deleteMapping={deleteMapping}
+          mode={mode}
+          setBuilderMode={setBuilderMode}
+          setJsonMode={setJsonMode}
+        />
+      )}
+      {isLoading && <Overlay />}
+    </Wrapper>
+  );
+};
 
-    return (
-      <Wrapper>
-        {mode === 'builder' && (
-          <MappingBuilder
-            mapping={mapping}
-            isLoading={isLoading}
-            save={updateMapping}
-            sync={syncWorkingCopy}
-            deleteMapping={deleteMapping}
-            mode={mode}
-            setBuilderMode={this.setBuilderMode}
-            setJsonMode={this.setJsonMode}
-          />
-        )}
-        {mode === 'json' && (
-          <MappingJsonEditor
-            mapping={mapping}
-            isLoading={isLoading}
-            save={updateMapping}
-            sync={syncWorkingCopy}
-            deleteMapping={deleteMapping}
-            mode={mode}
-            setBuilderMode={this.setBuilderMode}
-            setJsonMode={this.setJsonMode}
-          />
-        )}
-        {isLoading && <Overlay />}
-      </Wrapper>
-    );
-  }
-}
+export default Mapping;

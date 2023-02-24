@@ -11,58 +11,56 @@ export interface IPaneHeaderButtonProps<ContentData> {
   removeContent: (contentId: string) => void;
 }
 
-class PaneHeaderButton<ContentData> extends React.Component<
-  IPaneHeaderButtonProps<ContentData>
-> {
-  handleOpen = (e: React.SyntheticEvent) => {
+const PaneHeaderButton = <ContentData,>({
+  pane,
+  content,
+  contentTypes,
+  removeContent,
+  setCurrentContent,
+}: IPaneHeaderButtonProps<ContentData>): React.ReactElement => {
+  const handleOpen = (e: React.SyntheticEvent) => {
     // prevents setCurrentPane
     e.stopPropagation();
 
-    const { content, setCurrentContent } = this.props;
     setCurrentContent(content.id);
   };
 
-  handleRemove = (e: React.SyntheticEvent) => {
+  const handleRemove = (e: React.SyntheticEvent) => {
     // prevents setCurrentPane
     e.stopPropagation();
 
-    const { content, removeContent } = this.props;
     removeContent(content.id);
   };
 
-  render() {
-    const { pane, content, contentTypes, removeContent } = this.props;
-
-    const contentType = contentTypes.find(ct => ct.id === content.type);
-    if (contentType === undefined) {
-      throw new Error(
-        `unsupported content type: ${content.type}\n${JSON.stringify(content)}`,
-      );
-    }
-
-    const renderContext = {
-      content,
-      pane,
-      extra: {
-        close: () => {
-          removeContent(content.id);
-        },
-      },
-    };
-
-    const label = contentType.renderButton(renderContext);
-    const icon = contentType.renderIcon(renderContext);
-
-    return (
-      <Container isCurrent={content.isCurrent} onClick={this.handleOpen}>
-        {icon}
-        <Label>{label}</Label>
-        <RemoveButton onClick={this.handleRemove}>
-          <RemoveIcon size={13} />
-        </RemoveButton>
-      </Container>
+  const contentType = contentTypes.find(ct => ct.id === content.type);
+  if (contentType === undefined) {
+    throw new Error(
+      `unsupported content type: ${content.type}\n${JSON.stringify(content)}`,
     );
   }
-}
+
+  const renderContext = {
+    content,
+    pane,
+    extra: {
+      close: () => {
+        removeContent(content.id);
+      },
+    },
+  };
+
+  const label = contentType.renderButton(renderContext);
+  const icon = contentType.renderIcon(renderContext);
+
+  return (
+    <Container isCurrent={content.isCurrent} onClick={handleOpen}>
+      {icon}
+      <Label>{label}</Label>
+      <RemoveButton onClick={handleRemove}>
+        <RemoveIcon size={13} />
+      </RemoveButton>
+    </Container>
+  );
+};
 
 export default PaneHeaderButton;

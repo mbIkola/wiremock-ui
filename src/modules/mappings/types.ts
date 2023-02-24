@@ -166,3 +166,7 @@ export interface IMappingFormValues {
     | IMappingResponseUniformDelayDistribution
     | IMappingResponseLogNormalDelayDistribution;
 }
+
+export type IMappingMode = 'builder' | 'json';
+
+export type IMappingRequestParamType = 'query' | 'headers' | 'cookies' | 'body';

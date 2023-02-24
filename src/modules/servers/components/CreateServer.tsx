@@ -37,129 +37,125 @@ const SubGrid = styled.div`
   align-items: top;
 `;
 
-class CreateServer extends React.Component<ICreateServerProps> {
-  render() {
-    const { createServer } = this.props;
-
-    return (
-      <Container>
-        <Form>
-          <Title>Create new server</Title>
-          <Formik
-            initialValues={{
-              name: '',
-              url: '',
-              port: '',
-            }}
-            validationSchema={Yup.object().shape({
-              name: Yup.string().min(1).max(256).required(),
-              url: Yup.string()
-                .matches(
-                  /^https?:\/\/(((www\.)?[a-zA-Z0-9._-]{2,}\.[a-z]{2,6})|localhost|([0-9]{1,3}\.){3}[0-9]{1,3})$/,
-                  'Invalid URL',
-                )
-                .required(),
-              port: Yup.number().min(1).max(65535),
-            })}
-            onSubmit={(values: IFormValues) => {
-              createServer({
-                ...values,
-                port: values.port !== '' ? Number(values.port) : undefined,
-              });
-            }}
-            render={({
-              values,
-              isValid,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-            }: FormikProps<IFormValues>) => (
-              <SubGrid>
-                <div
-                  style={{
-                    gridColumnStart: 1,
-                    gridColumnEnd: 3,
-                  }}
-                >
-                  <Label htmlFor="name">Name</Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    type="text"
-                    value={values.name}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    placeholder="e.g. default server"
-                  />
-                  {errors.name && touched.name && (
-                    <div style={{ color: 'red', marginTop: '.5rem' }}>
-                      {errors.name}
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <Label htmlFor="url">URL</Label>
-                  <Input
-                    id="url"
-                    name="url"
-                    type="text"
-                    value={values.url}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    placeholder="e.g. http://localhost"
-                  />
-                  {errors.url && touched.url && (
-                    <div style={{ color: 'red', marginTop: '.5rem' }}>
-                      {errors.url}
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <Label htmlFor="port">Port</Label>
-                  <Input
-                    id="port"
-                    name="port"
-                    type="text"
-                    value={values.port}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.port && touched.port && (
-                    <div style={{ color: 'red', marginTop: '.5rem' }}>
-                      {errors.port}
-                    </div>
-                  )}
-                </div>
-                <div
-                  style={{
-                    gridColumnStart: 2,
-                    gridColumnEnd: 3,
-                    justifySelf: 'end',
-                  }}
-                >
-                  <Button
-                    label="CREATE"
-                    variant={isValid ? 'primary' : 'default'}
-                    onClick={handleSubmit}
-                    icon={
-                      isValid ? (
-                        <ArrowRight size={16} style={{ marginLeft: 9 }} />
-                      ) : (
-                        <Slash size={16} style={{ marginLeft: 9 }} />
-                      )
-                    }
-                    iconPlacement="append"
-                  />
-                </div>
-              </SubGrid>
-            )}
-          />
-        </Form>
-      </Container>
-    );
-  }
-}
+const CreateServer: React.FC<ICreateServerProps> = ({ createServer }) => {
+  return (
+    <Container>
+      <Form>
+        <Title>Create new server</Title>
+        <Formik
+          initialValues={{
+            name: '',
+            url: '',
+            port: '',
+          }}
+          validationSchema={Yup.object().shape({
+            name: Yup.string().min(1).max(256).required(),
+            url: Yup.string()
+              .matches(
+                /^https?:\/\/(((www\.)?[a-zA-Z0-9._-]{2,}\.[a-z]{2,6})|localhost|([0-9]{1,3}\.){3}[0-9]{1,3})$/,
+                'Invalid URL',
+              )
+              .required(),
+            port: Yup.number().min(1).max(65535),
+          })}
+          onSubmit={(values: IFormValues) => {
+            createServer({
+              ...values,
+              port: values.port !== '' ? Number(values.port) : undefined,
+            });
+          }}
+          render={({
+            values,
+            isValid,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+          }: FormikProps<IFormValues>) => (
+            <SubGrid>
+              <div
+                style={{
+                  gridColumnStart: 1,
+                  gridColumnEnd: 3,
+                }}
+              >
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  value={values.name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder="e.g. default server"
+                />
+                {errors.name && touched.name && (
+                  <div style={{ color: 'red', marginTop: '.5rem' }}>
+                    {errors.name}
+                  </div>
+                )}
+              </div>
+              <div>
+                <Label htmlFor="url">URL</Label>
+                <Input
+                  id="url"
+                  name="url"
+                  type="text"
+                  value={values.url}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder="e.g. http://localhost"
+                />
+                {errors.url && touched.url && (
+                  <div style={{ color: 'red', marginTop: '.5rem' }}>
+                    {errors.url}
+                  </div>
+                )}
+              </div>
+              <div>
+                <Label htmlFor="port">Port</Label>
+                <Input
+                  id="port"
+                  name="port"
+                  type="text"
+                  value={values.port}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.port && touched.port && (
+                  <div style={{ color: 'red', marginTop: '.5rem' }}>
+                    {errors.port}
+                  </div>
+                )}
+              </div>
+              <div
+                style={{
+                  gridColumnStart: 2,
+                  gridColumnEnd: 3,
+                  justifySelf: 'end',
+                }}
+              >
+                <Button
+                  label="CREATE"
+                  variant={isValid ? 'primary' : 'default'}
+                  onClick={handleSubmit}
+                  icon={
+                    isValid ? (
+                      <ArrowRight size={16} style={{ marginLeft: 9 }} />
+                    ) : (
+                      <Slash size={16} style={{ marginLeft: 9 }} />
+                    )
+                  }
+                  iconPlacement="append"
+                />
+              </div>
+            </SubGrid>
+          )}
+        />
+      </Form>
+    </Container>
+  );
+};
 
 export default CreateServer;

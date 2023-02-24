@@ -10,27 +10,23 @@ export interface ITreeProps<NodeData> {
   openedIds: string[];
 }
 
-export interface ITreeState<NodeData> {
-  current?: Node<NodeData>;
-}
+const Tree = <NodeData,>({
+  root,
+  openedIds,
+  onClick,
+  getIcon,
+}: ITreeProps<NodeData>): React.ReactElement => {
+  return (
+    <Container>
+      <TreeNode
+        node={root}
+        openedIds={openedIds}
+        onClick={onClick}
+        getIcon={getIcon}
+        depth={0}
+      />
+    </Container>
+  );
+};
 
-export default class Tree<NodeData> extends React.Component<
-  ITreeProps<NodeData>,
-  ITreeState<NodeData>
-> {
-  render() {
-    const { root, openedIds, onClick, getIcon } = this.props;
-
-    return (
-      <Container>
-        <TreeNode
-          node={root}
-          openedIds={openedIds}
-          onClick={onClick}
-          getIcon={getIcon}
-          depth={0}
-        />
-      </Container>
-    );
-  }
-}
+export default Tree;

@@ -12,43 +12,45 @@ export interface IPaneHeaderProps<ContentData> {
   splitPane: (axis: PaneSplitAxis) => void;
 }
 
-export default class PaneHeader<ContentData> extends React.Component<
-  IPaneHeaderProps<ContentData>
-> {
-  splitHorizontally = (e: React.SyntheticEvent) => {
+const PaneHeader = <ContentData,>({
+  pane,
+  contentTypes,
+  setCurrentContent,
+  removeContent,
+  splitPane,
+}: IPaneHeaderProps<ContentData>): React.ReactElement => {
+  const splitHorizontally = (e: React.SyntheticEvent) => {
     e.stopPropagation();
-    this.props.splitPane(PaneSplitAxis.Horizontal);
+    splitPane(PaneSplitAxis.Horizontal);
   };
 
-  splitVertically = (e: React.SyntheticEvent) => {
+  const splitVertically = (e: React.SyntheticEvent) => {
     e.stopPropagation();
-    this.props.splitPane(PaneSplitAxis.Vertical);
+    splitPane(PaneSplitAxis.Vertical);
   };
 
-  render() {
-    const { pane, contentTypes, setCurrentContent, removeContent } = this.props;
+  return (
+    <Container>
+      <Buttons>
+        {pane.contents.map(content => (
+          <PaneHeaderButton
+            key={content.id}
+            pane={pane}
+            content={content}
+            contentTypes={contentTypes}
+            setCurrentContent={setCurrentContent}
+            removeContent={removeContent}
+          />
+        ))}
+      </Buttons>
+      {pane.contents.length > 0 && (
+        <SplitButtons>
+          <SplitPaneIcon axis="horizontal" onClick={splitHorizontally} />
+          <SplitPaneIcon axis="vertical" onClick={splitVertically} />
+        </SplitButtons>
+      )}
+    </Container>
+  );
+};
 
-    return (
-      <Container>
-        <Buttons>
-          {pane.contents.map(content => (
-            <PaneHeaderButton
-              key={content.id}
-              pane={pane}
-              content={content}
-              contentTypes={contentTypes}
-              setCurrentContent={setCurrentContent}
-              removeContent={removeContent}
-            />
-          ))}
-        </Buttons>
-        {pane.contents.length > 0 && (
-          <SplitButtons>
-            <SplitPaneIcon axis="horizontal" onClick={this.splitHorizontally} />
-            <SplitPaneIcon axis="vertical" onClick={this.splitVertically} />
-          </SplitButtons>
-        )}
-      </Container>
-    );
-  }
-}
+export default PaneHeader;

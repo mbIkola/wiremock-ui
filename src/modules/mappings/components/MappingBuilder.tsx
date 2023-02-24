@@ -1,7 +1,11 @@
 import * as React from 'react';
-import { InjectedFormikProps, withFormik } from 'formik';
+import { FormikProps, withFormik } from 'formik';
 import { Builder, Block, Input } from 'edikit';
-import { IMapping, IMappingFormValues } from '../types';
+import {
+  IMapping,
+  IMappingFormValues,
+  IMappingRequestParamType,
+} from '../types';
 import { mappingValidationSchema } from '../validation';
 import { mappingToFormValues, mappingFormValuesToMapping } from '../dto';
 import { Container, Content } from './Mapping_styled';
@@ -21,12 +25,6 @@ interface IMappingBuilderProps {
   setJsonMode(): void;
 }
 
-interface IMappingBuilderState {
-  isRequestOpened: boolean;
-  isResponseOpened: boolean;
-  requestParamsType: 'query' | 'headers' | 'cookies' | 'body';
-}
-
 const enhance = withFormik<IMappingBuilderProps, IMappingFormValues>({
   enableReinitialize: true,
   isInitialValid: true,
@@ -34,123 +32,108 @@ const enhance = withFormik<IMappingBuilderProps, IMappingFormValues>({
     return mappingToFormValues(props.mapping);
   },
   validationSchema: mappingValidationSchema,
-  handleSubmit: (values, { props }) => {
-    props.save(mappingFormValuesToMapping(values));
+  handleSubmit: (values, { props: { save } }) => {
+    save(mappingFormValuesToMapping(values));
   },
 });
 
-class MappingBuilder extends React.Component<
-  InjectedFormikProps<IMappingBuilderProps, IMappingFormValues>,
-  IMappingBuilderState
-> {
-  constructor(props: any) {
-    super(props);
+const MappingBuilder: React.FC<
+  IMappingBuilderProps & FormikProps<IMappingFormValues>
+> = ({
+  isLoading,
+  deleteMapping,
+  values,
+  errors,
+  touched,
+  handleChange,
+  mode,
+  sync: _sync,
+  setBuilderMode,
+  setJsonMode,
+  submitForm,
+  handleBlur: _handleBlur,
+}) => {
+  const [isRequestOpened, setIsRequestOpened] = React.useState(true);
+  const [isResponseOpened, setIsResponseOpened] = React.useState(true);
+  const [requestParamsType, setRequestParamsType] =
+    React.useState<IMappingRequestParamType>('query');
 
-    this.state = {
-      isRequestOpened: true,
-      isResponseOpened: true,
-      requestParamsType: 'query',
-    };
-  }
-
-  sync = () => {
-    const { sync, values } = this.props;
-    if (sync !== undefined) {
-      sync(mappingFormValuesToMapping(values));
+  const sync = () => {
+    if (_sync) {
+      _sync(mappingFormValuesToMapping(values));
     }
   };
 
-  handleBlur = (e: React.SyntheticEvent) => {
-    const { handleBlur, sync } = this.props;
-    handleBlur(e);
-    if (sync !== undefined) this.sync();
+  const handleBlur = (e: React.SyntheticEvent) => {
+    _handleBlur(e);
+    if (sync !== undefined) sync();
   };
 
-  toggleRequest = () => {
-    this.setState({
-      isRequestOpened: !this.state.isRequestOpened,
-    });
+  const toggleRequest = () => {
+    setIsRequestOpened(!isRequestOpened);
   };
 
-  toggleResponse = () => {
-    this.setState({
-      isResponseOpened: !this.state.isResponseOpened,
-    });
+  const toggleResponse = () => {
+    setIsResponseOpened(!isResponseOpened);
   };
 
-  updateRequestParamsType = (
-    requestParamsType: 'query' | 'headers' | 'cookies' | 'body',
+  const updateRequestParamsType = (
+    requestParamsType: IMappingRequestParamType,
   ) => {
-    this.setState({ requestParamsType });
+    setRequestParamsType(requestParamsType);
   };
 
-  render() {
-    const {
-      isLoading,
-      deleteMapping,
-      values,
-      errors,
-      touched,
-      handleChange,
-      mode,
-      setBuilderMode,
-      setJsonMode,
-      submitForm,
-    } = this.props;
-    const { isRequestOpened, isResponseOpened, requestParamsType } = this.state;
-
-    return (
-      <Container>
-        <MappingBar
-          mode={mode}
-          setBuilderMode={setBuilderMode}
-          setJsonMode={setJsonMode}
-          save={submitForm}
-          deleteMapping={deleteMapping}
-        />
-        <Content isLoading={isLoading}>
-          <Builder>
-            <Block withLink={true}>
-              <Grid>
-                <label htmlFor="name">Name</label>
-                <Input
-                  id="name"
-                  value={values.name}
-                  onChange={handleChange}
-                  onBlur={this.handleBlur}
-                  style={{
-                    gridColumnStart: 2,
-                    gridColumnEnd: 9,
-                  }}
-                />
-              </Grid>
-            </Block>
-            <BuilderRequest
-              isOpened={isRequestOpened}
-              onToggle={this.toggleRequest}
-              values={values}
-              touched={touched}
-              errors={errors}
-              onChange={handleChange}
-              onBlur={this.handleBlur}
-              paramsType={requestParamsType}
-              updateParamsType={this.updateRequestParamsType}
-            />
-            <BuilderResponse
-              isOpened={isResponseOpened}
-              onToggle={this.toggleResponse}
-              values={values}
-              touched={touched}
-              errors={errors}
-              onChange={handleChange}
-              onBlur={this.handleBlur}
-              sync={this.sync}
-            />
-          </Builder>
-        </Content>
-      </Container>
-    );
-  }
-}
+  return (
+    <Container>
+      <MappingBar
+        mode={mode}
+        setBuilderMode={setBuilderMode}
+        setJsonMode={setJsonMode}
+        save={submitForm}
+        deleteMapping={deleteMapping}
+      />
+      <Content isLoading={isLoading}>
+        <Builder>
+          <Block withLink={true}>
+            <Grid>
+              <label htmlFor="name">Name</label>
+              <Input
+                id="name"
+                value={values.name}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                style={{
+                  gridColumnStart: 2,
+                  gridColumnEnd: 9,
+                }}
+              />
+            </Grid>
+          </Block>
+          <BuilderRequest
+            isOpened={isRequestOpened}
+            onToggle={toggleRequest}
+            values={values}
+            touched={touched}
+            errors={errors}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            paramsType={requestParamsType}
+            updateParamsType={updateRequestParamsType}
+          />
+          <BuilderResponse
+            isOpened={isResponseOpened}
+            onToggle={toggleResponse}
+            values={values}
+            touched={touched}
+            errors={errors}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            sync={sync}
+          />
+        </Builder>
+      </Content>
+    </Container>
+  );
+};
 
 export default enhance(MappingBuilder);

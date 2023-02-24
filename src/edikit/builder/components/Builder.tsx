@@ -43,22 +43,18 @@ interface IBuilderProps {
   theme: ITheme;
 }
 
-class Builder extends React.Component<IBuilderProps> {
-  render() {
-    const { title, subtitle, children } = this.props;
-
-    return (
-      <Container>
-        {title && (
-          <Header>
-            <Title>{title}</Title>
-            {subtitle && <Subtitle>{subtitle}</Subtitle>}
-          </Header>
-        )}
-        {children && <Content>{children}</Content>}
-      </Container>
-    );
-  }
-}
+const Builder: React.FC<IBuilderProps> = ({ title, subtitle, children }) => {
+  return (
+    <Container>
+      {title && (
+        <Header>
+          <Title>{title}</Title>
+          {subtitle && <Subtitle>{subtitle}</Subtitle>}
+        </Header>
+      )}
+      {children && <Content>{children}</Content>}
+    </Container>
+  );
+};
 
 export default withTheme(Builder);

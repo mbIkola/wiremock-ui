@@ -41,10 +41,10 @@ interface INotificationsItemProps {
   notification: INotification;
 }
 
-export default class NotificationsItem extends React.Component<INotificationsItemProps> {
-  render() {
-    const { notification } = this.props;
+const NotificationsItem: React.FC<INotificationsItemProps> = ({
+  notification,
+}) => {
+  return <Item type={notification.type}>{notification.content}</Item>;
+};
 
-    return <Item type={notification.type}>{notification.content}</Item>;
-  }
-}
+export default NotificationsItem;

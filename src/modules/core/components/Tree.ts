@@ -12,4 +12,4 @@ export type ITreeClickHandler = BaseTreeClickHandler<IData>;
 
 export type ITreeIconGetter = BaseTreeIconGetter<IData>;
 
-export class Tree extends BaseTree<IData> {}
+export const Tree = BaseTree<IData>;

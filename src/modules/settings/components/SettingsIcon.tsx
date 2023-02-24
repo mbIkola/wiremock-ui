@@ -6,12 +6,8 @@ export interface ISettingsIconProps {
   theme: any;
 }
 
-class SettingsIcon extends React.Component<ISettingsIconProps> {
-  render() {
-    const { theme } = this.props;
-
-    return <Icon size={12} color={theme.colors.accent} />;
-  }
-}
+const SettingsIcon: React.FC<ISettingsIconProps> = ({ theme }) => {
+  return <Icon size={12} color={theme.colors.accent} />;
+};
 
 export default withTheme(SettingsIcon);

@@ -17,41 +17,39 @@ interface IBuilderResponseProps {
   sync(): void;
 }
 
-export default class BuilderResponse extends React.Component<IBuilderResponseProps> {
-  render() {
-    const {
-      isOpened,
-      onToggle,
-      values,
-      errors,
-      touched,
-      onChange,
-      onBlur,
-      sync,
-    } = this.props;
+const BuilderResponse: React.FC<IBuilderResponseProps> = ({
+  isOpened,
+  onToggle,
+  values,
+  errors,
+  touched,
+  onChange,
+  onBlur,
+  sync,
+}) => {
+  return (
+    <React.Fragment>
+      <BuilderSectionLabel
+        label="Response"
+        isOpened={isOpened}
+        onToggle={onToggle}
+      />
+      {isOpened && (
+        <Block withLink={true}>
+          <Grid>
+            <ResponseBase
+              values={values}
+              errors={errors}
+              touched={touched}
+              onChange={onChange}
+              onBlur={onBlur}
+              sync={sync}
+            />
+          </Grid>
+        </Block>
+      )}
+    </React.Fragment>
+  );
+};
 
-    return (
-      <React.Fragment>
-        <BuilderSectionLabel
-          label="Response"
-          isOpened={isOpened}
-          onToggle={onToggle}
-        />
-        {isOpened && (
-          <Block withLink={true}>
-            <Grid>
-              <ResponseBase
-                values={values}
-                errors={errors}
-                touched={touched}
-                onChange={onChange}
-                onBlur={onBlur}
-                sync={sync}
-              />
-            </Grid>
-          </Block>
-        )}
-      </React.Fragment>
-    );
-  }
-}
+export default BuilderResponse;

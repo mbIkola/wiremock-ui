@@ -57,18 +57,16 @@ const Addon = styled.div`
 
 type InputProps = React.InputHTMLAttributes<HTMLSelectElement>;
 
-export default class Select extends React.Component<InputProps> {
-  render() {
-    const { style, ...selectProps } = this.props;
+const Select: React.FC<InputProps> = ({ style, ...selectProps }) => {
+  return (
+    <Container style={style}>
+      <Node {...selectProps} />
+      <Addon>
+        <ChevronUp size={10} />
+        <ChevronDown size={10} />
+      </Addon>
+    </Container>
+  );
+};
 
-    return (
-      <Container style={style}>
-        <Node {...selectProps} />
-        <Addon>
-          <ChevronUp size={10} />
-          <ChevronDown size={10} />
-        </Addon>
-      </Container>
-    );
-  }
-}
+export default Select;

@@ -15,112 +15,104 @@ export interface IPaneProps<Data> {
   splitPane: (paneId: string, axis: PaneSplitAxis) => void;
 }
 
-export default class Pane<Data> extends React.Component<IPaneProps<Data>> {
-  setCurrentPane = () => {
-    const { pane, setCurrentPane } = this.props;
-    setCurrentPane(pane.id);
+const Pane = <Data,>({
+  pane,
+  panes,
+  contentTypes,
+  setCurrentPane: _setCurrentPane,
+  setPaneCurrentContent,
+  removePaneContent,
+  splitPane: _splitPane,
+}: IPaneProps<Data>): React.ReactElement => {
+  const setCurrentPane = () => {
+    _setCurrentPane(pane.id);
   };
 
-  setCurrentContent = (contentId: string) => {
-    const { pane, setPaneCurrentContent } = this.props;
+  const setCurrentContent = (contentId: string) => {
     setPaneCurrentContent(pane.id, contentId);
   };
 
-  removeContent = (contentId: string) => {
-    const { pane, removePaneContent } = this.props;
+  const removeContent = (contentId: string) => {
     removePaneContent(pane.id, contentId);
   };
 
-  closeContent = (contentId: string) => () => {
-    this.removeContent(contentId);
+  const closeContent = (contentId: string) => () => {
+    removeContent(contentId);
   };
 
-  splitPane = (axis: PaneSplitAxis) => {
-    const { pane, splitPane } = this.props;
-    splitPane(pane.id, axis);
+  const splitPane = (axis: PaneSplitAxis) => {
+    _splitPane(pane.id, axis);
   };
 
-  render() {
-    const {
-      pane,
-      panes,
-      contentTypes,
-      setCurrentPane,
-      setPaneCurrentContent,
-      removePaneContent,
-      splitPane,
-    } = this.props;
-
-    if (pane.split === true) {
-      return (
-        <Allotment vertical={pane.splitAxis === PaneSplitAxis.Horizontal}>
-          <Allotment.Pane preferredSize="50%">
-            {pane.children.map(childPaneId => {
-              const childPane = panes.find(p => p.id === childPaneId);
-              if (childPane === undefined) {
-                throw new Error(
-                  `no pane found for id: ${childPaneId}\n${JSON.stringify(
-                    pane,
-                  )}`,
-                );
-              }
-
-              return (
-                <Pane
-                  key={childPaneId}
-                  pane={childPane}
-                  panes={panes}
-                  contentTypes={contentTypes}
-                  setCurrentPane={setCurrentPane}
-                  setPaneCurrentContent={setPaneCurrentContent}
-                  removePaneContent={removePaneContent}
-                  splitPane={splitPane}
-                />
-              );
-            })}
-          </Allotment.Pane>
-        </Allotment>
-      );
-    }
-
-    let contents: Array<IPaneContent<Data>> = [];
-    let content;
-    if (pane !== undefined) {
-      contents = pane.contents;
-      content = contents.find(c => c.isCurrent);
-    }
-
-    if (content === undefined) return <EmptyPane />;
-
-    const foundContent = content as IPaneContent<Data>;
-    const contentType = contentTypes.find(ct => ct.id === foundContent.type);
-    if (contentType === undefined) {
-      throw new Error(
-        `unsupported content type: ${foundContent.type}\n${JSON.stringify(
-          foundContent,
-        )}`,
-      );
-    }
-
+  if (pane.split === true) {
     return (
-      <Container isCurrent={pane.isCurrent} onClick={this.setCurrentPane}>
-        <PaneHeader
-          contentTypes={contentTypes}
-          pane={pane}
-          setCurrentContent={this.setCurrentContent}
-          removeContent={this.removeContent}
-          splitPane={this.splitPane}
-        />
-        <Content>
-          {contentType.renderPane({
-            content: foundContent,
-            pane,
-            extra: {
-              close: this.closeContent(content.id),
-            },
+      <Allotment vertical={pane.splitAxis === PaneSplitAxis.Horizontal}>
+        <Allotment.Pane preferredSize="50%">
+          {pane.children.map(childPaneId => {
+            const childPane = panes.find(p => p.id === childPaneId);
+            if (childPane === undefined) {
+              throw new Error(
+                `no pane found for id: ${childPaneId}\n${JSON.stringify(pane)}`,
+              );
+            }
+
+            return (
+              <Pane
+                key={childPaneId}
+                pane={childPane}
+                panes={panes}
+                contentTypes={contentTypes}
+                setCurrentPane={setCurrentPane}
+                setPaneCurrentContent={setPaneCurrentContent}
+                removePaneContent={removePaneContent}
+                splitPane={splitPane}
+              />
+            );
           })}
-        </Content>
-      </Container>
+        </Allotment.Pane>
+      </Allotment>
     );
   }
-}
+
+  let contents: Array<IPaneContent<Data>> = [];
+  let content;
+  if (pane !== undefined) {
+    contents = pane.contents;
+    content = contents.find(c => c.isCurrent);
+  }
+
+  if (content === undefined) return <EmptyPane />;
+
+  const foundContent = content as IPaneContent<Data>;
+  const contentType = contentTypes.find(ct => ct.id === foundContent.type);
+  if (contentType === undefined) {
+    throw new Error(
+      `unsupported content type: ${foundContent.type}\n${JSON.stringify(
+        foundContent,
+      )}`,
+    );
+  }
+
+  return (
+    <Container isCurrent={pane.isCurrent} onClick={setCurrentPane}>
+      <PaneHeader
+        contentTypes={contentTypes}
+        pane={pane}
+        setCurrentContent={setCurrentContent}
+        removeContent={removeContent}
+        splitPane={splitPane}
+      />
+      <Content>
+        {contentType.renderPane({
+          content: foundContent,
+          pane,
+          extra: {
+            close: closeContent(content.id),
+          },
+        })}
+      </Content>
+    </Container>
+  );
+};
+
+export default Pane;

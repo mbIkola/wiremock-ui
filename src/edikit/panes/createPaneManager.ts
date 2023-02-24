@@ -55,7 +55,7 @@ export default <AppState, Data>({
     },
   });
 
-  class NameSpacedPaneManager extends PaneManager<Data> {}
+  const NameSpacedPaneManager = PaneManager<Data>;
 
   return connect(mapStateToProps, mapDispatchToProps)(NameSpacedPaneManager);
 };

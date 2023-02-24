@@ -18,54 +18,50 @@ interface IMappingJsonEditorProps {
   theme: ITheme;
 }
 
-class MappingJsonEditor extends React.Component<IMappingJsonEditorProps> {
-  render() {
-    const {
-      mapping,
-      isLoading,
-      mode,
-      setBuilderMode,
-      setJsonMode,
-      deleteMapping,
-      theme,
-    } = this.props;
+const MappingJsonEditor: React.FC<IMappingJsonEditorProps> = ({
+  mapping,
+  isLoading,
+  mode,
+  setBuilderMode,
+  setJsonMode,
+  deleteMapping,
+  theme,
+}) => {
+  const source = JSON.stringify(mapping, null, '    ');
 
-    const source = JSON.stringify(mapping, null, '    ');
-
-    return (
-      <Container>
-        <MappingBar
-          mode={mode}
-          setBuilderMode={setBuilderMode}
-          setJsonMode={setJsonMode}
-          deleteMapping={deleteMapping}
+  return (
+    <Container>
+      <MappingBar
+        mode={mode}
+        setBuilderMode={setBuilderMode}
+        setJsonMode={setJsonMode}
+        deleteMapping={deleteMapping}
+      />
+      <Content isLoading={isLoading}>
+        <AceEditor
+          mode="json"
+          theme={theme.editor.theme}
+          value={source}
+          readOnly={true}
+          name="editor"
+          showPrintMargin={false}
+          showGutter={true}
+          highlightActiveLine={true}
+          editorProps={{
+            $blockScrolling: Infinity,
+          }}
+          fontSize={12}
+          wrapEnabled={false}
+          width="100%"
+          height="100%"
+          setOptions={{
+            showLineNumbers: true,
+            tabSize: 4,
+          }}
         />
-        <Content isLoading={isLoading}>
-          <AceEditor
-            mode="json"
-            theme={theme.editor.theme}
-            value={source}
-            readOnly={true}
-            name="editor"
-            showPrintMargin={false}
-            showGutter={true}
-            highlightActiveLine={true}
-            editorProps={{
-              $blockScrolling: Infinity,
-            }}
-            fontSize={12}
-            wrapEnabled={false}
-            width="100%"
-            height="100%"
-            setOptions={{
-              showLineNumbers: true,
-              tabSize: 4,
-            }}
-          />
-        </Content>
-      </Container>
-    );
-  }
-}
+      </Content>
+    </Container>
+  );
+};
 
 export default withTheme(MappingJsonEditor);

@@ -7,8 +7,8 @@ const Icon = styled.div`
   font-size: 11px;
 `;
 
-export default class MappingIcon extends React.Component {
-  render() {
-    return <Icon>M</Icon>;
-  }
-}
+const MappingIcon: React.FC = () => {
+  return <Icon>M</Icon>;
+};
+
+export default MappingIcon;

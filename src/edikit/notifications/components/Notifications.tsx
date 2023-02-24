@@ -15,19 +15,14 @@ interface INotificationsProps {
   notifications: INotification[];
 }
 
-export default class Notifications extends React.Component<INotificationsProps> {
-  render() {
-    const { notifications } = this.props;
+const Notifications: React.FC<INotificationsProps> = ({ notifications }) => {
+  return (
+    <Wrapper>
+      {notifications.map(notification => (
+        <NotificationsItem key={notification.id} notification={notification} />
+      ))}
+    </Wrapper>
+  );
+};
 
-    return (
-      <Wrapper>
-        {notifications.map(notification => (
-          <NotificationsItem
-            key={notification.id}
-            notification={notification}
-          />
-        ))}
-      </Wrapper>
-    );
-  }
-}
+export default Notifications;

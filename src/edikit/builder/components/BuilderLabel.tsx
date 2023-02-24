@@ -66,25 +66,24 @@ interface IBuilderLabelProps {
   onClick?: React.MouseEventHandler;
 }
 
-export default class BuilderLabel extends React.Component<IBuilderLabelProps> {
-  static defaultProps = {
-    withLink: false,
-    style: {},
-  };
-
-  render() {
-    const { label, children, withLink, style, onClick } = this.props;
-
-    if (label === undefined && children === undefined) {
-      return null;
-    }
-
-    return (
-      <Container withLink={withLink}>
-        <Label style={style} onClick={onClick}>
-          {label || children}
-        </Label>
-      </Container>
-    );
+const BuilderLabel: React.FC<IBuilderLabelProps> = ({
+  withLink = false,
+  style = {},
+  label,
+  children,
+  onClick,
+}) => {
+  if (label === undefined && children === undefined) {
+    return null;
   }
-}
+
+  return (
+    <Container withLink={withLink}>
+      <Label style={style} onClick={onClick}>
+        {label || children}
+      </Label>
+    </Container>
+  );
+};
+
+export default BuilderLabel;

@@ -43,58 +43,60 @@ interface IMappingBarProps {
   deleteMapping?: () => void;
 }
 
-export default class MappingBar extends React.Component<IMappingBarProps> {
-  render() {
-    const { mode, setBuilderMode, setJsonMode, save, deleteMapping } =
-      this.props;
-
-    return (
-      <Container>
-        <ButtonsWrapper>
+const MappingBar: React.FC<IMappingBarProps> = ({
+  mode,
+  setBuilderMode,
+  setJsonMode,
+  save,
+  deleteMapping,
+}) => {
+  return (
+    <Container>
+      <ButtonsWrapper>
+        <Button
+          onClick={setBuilderMode}
+          style={{
+            paddingLeft: '6px',
+            fontSize: '12px',
+            lineHeight: '1.6em',
+          }}
+          variant={mode === 'builder' ? 'primary' : 'default'}
+          icon={<BuilderModeIcon size={14} style={{ marginRight: '9px' }} />}
+        >
+          builder
+        </Button>
+        <Button
+          onClick={setJsonMode}
+          style={{
+            marginLeft: '6px',
+            paddingLeft: '6px',
+            fontSize: '12px',
+            lineHeight: '1.6em',
+          }}
+          variant={mode === 'json' ? 'primary' : 'default'}
+          icon={<JsonModeIcon size={14} style={{ marginRight: '9px' }} />}
+        >
+          json
+        </Button>
+      </ButtonsWrapper>
+      <ButtonsWrapper>
+        {save !== undefined && (
           <Button
-            onClick={setBuilderMode}
-            style={{
-              paddingLeft: '6px',
-              fontSize: '12px',
-              lineHeight: '1.6em',
-            }}
-            variant={mode === 'builder' ? 'primary' : 'default'}
-            icon={<BuilderModeIcon size={14} style={{ marginRight: '9px' }} />}
-          >
-            builder
-          </Button>
+            onClick={save}
+            style={actionButtonStyle}
+            variant="primary"
+            icon={<SaveIcon size={16} />}
+          />
+        )}
+        {deleteMapping !== undefined && (
           <Button
-            onClick={setJsonMode}
-            style={{
-              marginLeft: '6px',
-              paddingLeft: '6px',
-              fontSize: '12px',
-              lineHeight: '1.6em',
-            }}
-            variant={mode === 'json' ? 'primary' : 'default'}
-            icon={<JsonModeIcon size={14} style={{ marginRight: '9px' }} />}
-          >
-            json
-          </Button>
-        </ButtonsWrapper>
-        <ButtonsWrapper>
-          {save !== undefined && (
-            <Button
-              onClick={save}
-              style={actionButtonStyle}
-              variant="primary"
-              icon={<SaveIcon size={16} />}
-            />
-          )}
-          {deleteMapping !== undefined && (
-            <Button
-              onClick={deleteMapping}
-              style={actionButtonStyle}
-              variant="danger"
-              icon={<DeleteIcon size={16} />}
-            />
-          )}
-          {/*
+            onClick={deleteMapping}
+            style={actionButtonStyle}
+            variant="danger"
+            icon={<DeleteIcon size={16} />}
+          />
+        )}
+        {/*
                     <Button
                         style={actionButtonStyle}
                         variant="primary"
@@ -106,8 +108,9 @@ export default class MappingBar extends React.Component<IMappingBarProps> {
                         icon={<CancelIcon size={16}/>}
                     />
                     */}
-        </ButtonsWrapper>
-      </Container>
-    );
-  }
-}
+      </ButtonsWrapper>
+    </Container>
+  );
+};
+
+export default MappingBar;

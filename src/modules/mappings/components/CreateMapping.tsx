@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IMapping } from '../types';
+import { IMapping, IMappingMode } from '../types';
 import MappingJsonEditor from './MappingJsonEditor';
 import MappingBuilder from './MappingBuilder';
 import { Wrapper, Overlay } from './Mapping_styled';
@@ -14,70 +14,53 @@ interface ICreateMappingProps {
   cancel(): void;
 }
 
-interface ICreateMappingState {
-  mode: 'builder' | 'json';
-}
+const CreateMapping: React.FC<ICreateMappingProps> = ({
+  mapping,
+  isCreating,
+  init,
+  save,
+}) => {
+  const [mode, setMode] = React.useState<IMappingMode>('builder');
 
-export default class CreateMapping extends React.Component<
-  ICreateMappingProps,
-  ICreateMappingState
-> {
-  constructor(props: ICreateMappingProps) {
-    super(props);
+  React.useEffect(() => {
+    init();
+  }, []);
 
-    this.state = {
-      mode: 'builder',
-    };
-  }
-
-  componentDidMount() {
-    this.props.init();
-  }
-
-  setBuilderMode = () => {
-    this.setState({ mode: 'builder' });
+  const setBuilderMode = () => {
+    setMode('builder');
   };
 
-  setJsonMode = () => {
-    this.setState({ mode: 'json' });
+  const setJsonMode = () => {
+    setMode('json');
   };
 
-  render() {
-    const {
-      // creationId,
-      mapping,
-      isCreating,
-      save,
-    } = this.props;
+  if (mapping === undefined) return null;
 
-    if (mapping === undefined) return null;
+  return (
+    <Wrapper>
+      {mode === 'builder' && (
+        <MappingBuilder
+          mapping={mapping}
+          isLoading={isCreating}
+          save={save}
+          mode={mode}
+          setBuilderMode={setBuilderMode}
+          setJsonMode={setJsonMode}
+        />
+      )}
+      {mode === 'json' && (
+        <MappingJsonEditor
+          mapping={mapping}
+          isLoading={isCreating}
+          save={save}
+          mode={mode}
+          setBuilderMode={setBuilderMode}
+          setJsonMode={setJsonMode}
+        />
+      )}
+      {isCreating && <Overlay />}
+    </Wrapper>
+  );
+};
 
-    const { mode } = this.state;
-
-    return (
-      <Wrapper>
-        {mode === 'builder' && (
-          <MappingBuilder
-            mapping={mapping}
-            isLoading={isCreating}
-            save={save}
-            mode={mode}
-            setBuilderMode={this.setBuilderMode}
-            setJsonMode={this.setJsonMode}
-          />
-        )}
-        {mode === 'json' && (
-          <MappingJsonEditor
-            mapping={mapping}
-            isLoading={isCreating}
-            save={save}
-            mode={mode}
-            setBuilderMode={this.setBuilderMode}
-            setJsonMode={this.setJsonMode}
-          />
-        )}
-        {isCreating && <Overlay />}
-      </Wrapper>
-    );
-  }
-}
+export default CreateMapping;

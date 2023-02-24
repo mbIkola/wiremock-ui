@@ -72,45 +72,35 @@ interface IBlockProps {
   theme: ITheme;
 }
 
-class Block extends React.Component<IBlockProps> {
-  static defaultProps = {
-    withMarker: true,
-    markerColor: 'accent',
-    withLink: false,
-  };
-
-  render() {
-    const {
-      title,
-      children,
-      withLink,
-      withMarker,
-      markerColor: markerColorKey,
-      theme,
-    } = this.props;
-
-    if (title === undefined && children === undefined) {
-      return null;
-    }
-
-    let markerColor = theme.colors[markerColorKey!];
-    if (markerColor === undefined) {
-      markerColor = markerColorKey;
-    }
-
-    return (
-      <Container withLink={withLink!}>
-        <Content withMarker={withMarker!} markerColor={markerColor}>
-          {title && (
-            <Header>
-              <Title>{title}</Title>
-            </Header>
-          )}
-          <div>{children}</div>
-        </Content>
-      </Container>
-    );
+const Block: React.FC<IBlockProps> = ({
+  withLink = false,
+  withMarker = true,
+  markerColor: markerColorKey = 'accent',
+  title,
+  children,
+  theme,
+}) => {
+  if (title === undefined && children === undefined) {
+    return null;
   }
-}
+
+  let markerColor = theme.colors[markerColorKey];
+  if (markerColor === undefined) {
+    markerColor = markerColorKey;
+  }
+
+  return (
+    <Container withLink={withLink != null}>
+      <Content withMarker={withMarker != null} markerColor={markerColor}>
+        {title && (
+          <Header>
+            <Title>{title}</Title>
+          </Header>
+        )}
+        <div>{children}</div>
+      </Content>
+    </Container>
+  );
+};
 
 export default withTheme(Block);

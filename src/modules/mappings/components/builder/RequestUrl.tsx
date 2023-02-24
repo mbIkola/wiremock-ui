@@ -11,35 +11,37 @@ interface IRequetsUrlProps {
   onBlur(e: any): void;
 }
 
-export default class RequestUrl extends React.Component<IRequetsUrlProps> {
-  render() {
-    const { values, onChange, onBlur } = this.props;
+const RequestUrl: React.FC<IRequetsUrlProps> = ({
+  values,
+  onChange,
+  onBlur,
+}) => {
+  return (
+    <React.Fragment>
+      <Select
+        name="method"
+        value={values.method}
+        onChange={onChange}
+        onBlur={onBlur}
+      >
+        {mappingRequestMethods.map(method => (
+          <option key={method} value={method}>
+            {method}
+          </option>
+        ))}
+      </Select>
+      <Input
+        name="url"
+        value={values.url}
+        onChange={onChange}
+        onBlur={onBlur}
+        style={{
+          gridColumnStart: 2,
+          gridColumnEnd: 9,
+        }}
+      />
+    </React.Fragment>
+  );
+};
 
-    return (
-      <React.Fragment>
-        <Select
-          name="method"
-          value={values.method}
-          onChange={onChange}
-          onBlur={onBlur}
-        >
-          {mappingRequestMethods.map(method => (
-            <option key={method} value={method}>
-              {method}
-            </option>
-          ))}
-        </Select>
-        <Input
-          name="url"
-          value={values.url}
-          onChange={onChange}
-          onBlur={onBlur}
-          style={{
-            gridColumnStart: 2,
-            gridColumnEnd: 9,
-          }}
-        />
-      </React.Fragment>
-    );
-  }
-}
+export default RequestUrl;

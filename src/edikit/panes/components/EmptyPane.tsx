@@ -7,14 +7,12 @@ export interface IEmptyPaneProps {
   theme: ITheme;
 }
 
-class EmptyPane extends React.Component<IEmptyPaneProps> {
-  render() {
-    return (
-      <Container>
-        <Block />
-      </Container>
-    );
-  }
-}
+const EmptyPane: React.FC<IEmptyPaneProps> = () => {
+  return (
+    <Container>
+      <Block />
+    </Container>
+  );
+};
 
 export default withTheme(EmptyPane);

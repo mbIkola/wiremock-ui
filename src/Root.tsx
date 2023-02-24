@@ -7,15 +7,13 @@ import configureStore from './configureStore';
 
 const store = configureStore();
 
-class Root extends React.Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <GlobalStyles />
-        <AppContainer />
-      </Provider>
-    );
-  }
-}
+const Root = () => {
+  return (
+    <Provider store={store}>
+      <GlobalStyles />
+      <AppContainer />
+    </Provider>
+  );
+};
 
 export default Root;

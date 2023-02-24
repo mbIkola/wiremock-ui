@@ -15,21 +15,16 @@ export interface IExplorerProps {
   theme: ITheme;
 }
 
-export interface IExplorerState {
-  openedIds: string[];
-}
+const Explorer: React.FC<IExplorerProps> = ({
+  tree,
+  servers,
+  loadServerMappings,
+  addContentToCurrentPane,
+  theme,
+}) => {
+  const [openedIds, setOpenedIds] = React.useState(['root']);
 
-class Explorer extends React.Component<IExplorerProps, IExplorerState> {
-  constructor(props: IExplorerProps) {
-    super(props);
-
-    this.state = {
-      openedIds: ['root'],
-    };
-  }
-
-  getTreeNodeIcon = (node: ITreeNode): React.ReactNode => {
-    const { theme } = this.props;
+  const getTreeNodeIcon = (node: ITreeNode): React.ReactNode => {
     if (node.type === 'server') {
       return <ServerIcon size={12} color={theme.colors.accent} />;
     }
@@ -45,9 +40,7 @@ class Explorer extends React.Component<IExplorerProps, IExplorerState> {
     return;
   };
 
-  handleNodeClick = (node: ITreeNode) => {
-    const { loadServerMappings, servers, addContentToCurrentPane } = this.props;
-
+  const handleNodeClick = (node: ITreeNode) => {
     if (node.type === 'server.create') {
       addContentToCurrentPane({
         id: 'server.create',
@@ -102,31 +95,21 @@ class Explorer extends React.Component<IExplorerProps, IExplorerState> {
       });
     }
 
-    let openedIds;
-    if (this.state.openedIds.includes(node.id)) {
-      openedIds = this.state.openedIds.filter(id => id !== node.id);
+    if (openedIds.includes(node.id)) {
+      setOpenedIds(openedIds => openedIds.filter(id => id !== node.id));
     } else {
-      openedIds = [...this.state.openedIds, node.id];
+      setOpenedIds(openedIds => [...openedIds, node.id]);
     }
-
-    this.setState({
-      openedIds,
-    });
   };
 
-  render() {
-    const { tree } = this.props;
-    const { openedIds } = this.state;
-
-    return (
-      <Tree
-        root={tree}
-        openedIds={openedIds}
-        getIcon={this.getTreeNodeIcon}
-        onClick={this.handleNodeClick}
-      />
-    );
-  }
-}
+  return (
+    <Tree
+      root={tree}
+      openedIds={openedIds}
+      getIcon={getTreeNodeIcon}
+      onClick={handleNodeClick}
+    />
+  );
+};
 
 export default withTheme(Explorer);

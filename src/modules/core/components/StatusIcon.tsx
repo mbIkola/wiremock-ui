@@ -28,26 +28,23 @@ export interface IStatusIconProps {
   theme: ITheme;
 }
 
-class StatusIcon extends React.Component<IStatusIconProps> {
-  public static defaultProps = {
-    style: {},
-  };
+const StatusIcon: React.FC<IStatusIconProps> = ({
+  size,
+  status,
+  style = {},
+  theme,
+}) => {
+  const color = getColorForStatus(theme.colors, status);
+  const props = { size, color, style };
 
-  public render() {
-    const { size, status, style, theme } = this.props;
-
-    const color = getColorForStatus(theme.colors, status);
-    const props = { size, color, style };
-
-    if (status === undefined || status === null) {
-      return <span />;
-    }
-
-    if (status === 'ok') return <Check {...props} />;
-    if (status === 'ko') return <X {...props} />;
-
-    return <Slash {...props} />;
+  if (status === undefined || status === null) {
+    return <span />;
   }
-}
+
+  if (status === 'ok') return <Check {...props} />;
+  if (status === 'ko') return <X {...props} />;
+
+  return <Slash {...props} />;
+};
 
 export default withTheme(StatusIcon);

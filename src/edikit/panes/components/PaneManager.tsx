@@ -16,38 +16,35 @@ export interface IPaneManagerProps<Data> {
   splitPane: (paneId: string, axis: PaneSplitAxis) => void;
 }
 
-export default class PaneManager<Data> extends React.Component<
-  IPaneManagerProps<Data>
-> {
-  componentDidMount() {
-    this.props.init();
-  }
+const PaneManager = <Data,>({
+  root,
+  panes,
+  contentTypes,
+  init,
+  setCurrentPane,
+  setPaneCurrentContent,
+  removePaneContent,
+  splitPane,
+}: IPaneManagerProps<Data>): React.ReactElement | null => {
+  React.useEffect(() => {
+    init();
+  }, []);
 
-  render() {
-    const {
-      root,
-      panes,
-      contentTypes,
-      setCurrentPane,
-      setPaneCurrentContent,
-      removePaneContent,
-      splitPane,
-    } = this.props;
+  if (root === undefined) return null;
 
-    if (root === undefined) return null;
+  return (
+    <Container>
+      <Pane
+        pane={root}
+        panes={panes}
+        contentTypes={contentTypes}
+        setCurrentPane={setCurrentPane}
+        setPaneCurrentContent={setPaneCurrentContent}
+        removePaneContent={removePaneContent}
+        splitPane={splitPane}
+      />
+    </Container>
+  );
+};
 
-    return (
-      <Container>
-        <Pane
-          pane={root}
-          panes={panes}
-          contentTypes={contentTypes}
-          setCurrentPane={setCurrentPane}
-          setPaneCurrentContent={setPaneCurrentContent}
-          removePaneContent={removePaneContent}
-          splitPane={splitPane}
-        />
-      </Container>
-    );
-  }
-}
+export default PaneManager;

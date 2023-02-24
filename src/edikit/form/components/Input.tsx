@@ -39,8 +39,8 @@ const Node = styled.input`
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
-export default class Input extends React.Component<InputProps> {
-  render() {
-    return <Node {...this.props} />;
-  }
-}
+const Input: React.FC<InputProps> = props => {
+  return <Node {...props} />;
+};
+
+export default Input;

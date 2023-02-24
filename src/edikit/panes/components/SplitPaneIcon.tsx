@@ -6,16 +6,16 @@ export interface ISplitPaneIconProps {
   onClick: React.MouseEventHandler;
 }
 
-export default class SplitPaneIcon extends React.Component<ISplitPaneIconProps> {
-  render() {
-    return (
-      <Container {...this.props}>
-        <Icon axis={this.props.axis}>
-          <Part side="left" />
-          <Line />
-          <Part side="right" />
-        </Icon>
-      </Container>
-    );
-  }
-}
+const SplitPaneIcon: React.FC<ISplitPaneIconProps> = props => {
+  return (
+    <Container {...props}>
+      <Icon axis={props.axis}>
+        <Part side="left" />
+        <Line />
+        <Part side="right" />
+      </Icon>
+    </Container>
+  );
+};
+
+export default SplitPaneIcon;
