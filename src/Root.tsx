@@ -1,23 +1,21 @@
-import * as React from 'react'
-import { Store } from 'redux'
-import { Provider } from 'react-redux'
-import { IApplicationState } from './store'
-import AppContainer from './modules/core/containers/AppContainer'
+import * as React from 'react';
+import { Provider } from 'react-redux';
+import AppContainer from './modules/core/containers/AppContainer';
+import GlobalStyles from './globalStyles';
 
-interface IRootProps {
-    store: Store<IApplicationState>
+import configureStore from './configureStore';
+
+const store = configureStore();
+
+class Root extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <GlobalStyles />
+        <AppContainer />
+      </Provider>
+    );
+  }
 }
 
-class Root extends React.Component<IRootProps> {
-    render() {
-        const { store } = this.props
-
-        return (
-            <Provider store={store}>
-                <AppContainer/>
-            </Provider>
-        )
-    }
-}
-
-export default Root
+export default Root;

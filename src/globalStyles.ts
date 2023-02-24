@@ -1,6 +1,6 @@
-import { injectGlobal } from 'styled-components'
+import { createGlobalStyle } from 'styled-components';
 
-export default injectGlobal`
+export default createGlobalStyle`
 body {
   margin: 0;
   padding: 0;
@@ -72,4 +72,30 @@ html, body, #root {
 .Resizer.disabled:hover {
     border-color: transparent;
 }
-`
+
+.split-view {
+    display: flex;
+    flex: 1 1 0%;
+    height: 100%;
+    position: absolute;
+    outline: none;
+    overflow: hidden;
+    user-select: text;
+    flex-direction: row;
+    left: 0px;
+    right: 0px;
+}
+
+.split-view-container {
+    display: flex;
+    flex: 0 0 auto;
+    position: relative;
+}
+
+.split-view-view {
+    display: flex;
+    flex: 0 0 auto;
+    height: 100%;
+    position: absolute;
+}
+`;

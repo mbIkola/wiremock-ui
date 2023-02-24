@@ -1,8 +1,6 @@
 # WireMock UI
 
-[![wiremock ui license](https://img.shields.io/github/license/plouc/wiremock-ui.svg?longCache=true&style=for-the-badge)](https://github.com/plouc/wiremock-ui/blob/master/LICENSE)
-[![wiremock ui issues](https://img.shields.io/github/issues/plouc/wiremock-ui.svg?longCache=true&style=for-the-badge)](https://github.com/plouc/wiremock-ui/issues)
-[![wiremock ui build status](https://img.shields.io/travis/plouc/wiremock-ui.svg?longCache=true&style=for-the-badge)](https://travis-ci.org/plouc/wiremock-ui)
+[![wiremock ui license](https://img.shields.io/github/license/plouc/wiremock-ui.svg?longCache=true&style=for-the-badge)](https://github.com/plouc/wiremock-ui/blob/master/LICENSE) [![wiremock ui issues](https://img.shields.io/github/issues/plouc/wiremock-ui.svg?longCache=true&style=for-the-badge)](https://github.com/plouc/wiremock-ui/issues) [![wiremock ui build status](https://img.shields.io/travis/plouc/wiremock-ui.svg?longCache=true&style=for-the-badge)](https://travis-ci.org/plouc/wiremock-ui)
 
 An unofficial UI for [WireMock](http://wiremock.org/).
 
@@ -22,9 +20,7 @@ An unofficial UI for [WireMock](http://wiremock.org/).
 
 ## Project structure
 
-The project was bootstrapped using [create-react-app](https://github.com/facebook/create-react-app)
-using custom scripts [react-scripts-ts](https://github.com/wmonk/create-react-app-typescript)
-for typescript support.
+The project was bootstrapped using [create-react-app](https://github.com/facebook/create-react-app) using custom scripts [react-scripts-ts](https://github.com/wmonk/create-react-app-typescript) for typescript support.
 
 ## How to start the UI
 

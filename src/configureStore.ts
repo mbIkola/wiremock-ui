@@ -1,25 +1,22 @@
-import { Store, createStore, applyMiddleware } from 'redux'
-import { composeWithDevTools } from 'redux-devtools-extension'
-import { createEpicMiddleware } from 'redux-observable'
-import { notificationsMiddleware } from 'edikit'
-import { IApplicationState, rootReducer, rootEpic } from './store'
+import { configureStore, Store } from '@reduxjs/toolkit';
+import { createEpicMiddleware } from 'redux-observable';
+import { notificationsMiddleware } from 'edikit';
+import { IApplicationState, rootReducer, rootEpic } from './store';
 
-export default function configureStore(): Store<IApplicationState> {
-    const epicMiddleware = createEpicMiddleware()
+export default (): Store<IApplicationState> => {
+  const epicMiddleware = createEpicMiddleware();
 
-    const middlewares = [
-        epicMiddleware,
-        notificationsMiddleware,
-    ]
+  const middlewares = [epicMiddleware, notificationsMiddleware];
 
-    const store = createStore(
-        rootReducer,
-        composeWithDevTools(
-            applyMiddleware(...middlewares)
-        )
-    )
+  const store = configureStore({
+    reducer: rootReducer,
+    middleware: getDefaultMiddleware => {
+      if (!middlewares) return getDefaultMiddleware();
+      return getDefaultMiddleware().concat(...middlewares);
+    },
+  });
 
-    epicMiddleware.run(rootEpic)
+  epicMiddleware.run(rootEpic);
 
-    return store
-}
+  return store;
+};

@@ -1,2 +1,2 @@
-export * from './store'
-export * from './components/Tree'
+export * from './store';
+export * from './components/Tree';

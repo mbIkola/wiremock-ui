@@ -1,27 +1,23 @@
-import { INotification } from '../types'
-import { NotificationsActionTypes } from './types'
-import { NotificationsAction } from './actions'
+import { INotification } from '../types';
+import { NotificationsActionTypes } from './types';
+import { NotificationsAction } from './actions';
 
-export type INotificationsState = INotification[]
+export type INotificationsState = INotification[];
 
 export const notificationsReducer = (
-    state: INotificationsState = [],
-    action: NotificationsAction
+  state: INotificationsState = [],
+  action: NotificationsAction,
 ): INotificationsState => {
-    switch (action.type) {
-        case NotificationsActionTypes.TRIGGER_NOTIFICATION:
-            return [
-                ...state,
-                action.payload.notification,
-            ]
+  switch (action.type) {
+    case NotificationsActionTypes.TRIGGER_NOTIFICATION:
+      return [...state, action.payload.notification];
 
-        case NotificationsActionTypes.CLOSE_NOTIFICATION:
-            return state.filter(notification =>
-                notification.id !== action.payload.notificationId
-            )
+    case NotificationsActionTypes.CLOSE_NOTIFICATION:
+      return state.filter(
+        notification => notification.id !== action.payload.notificationId,
+      );
 
-        default:
-            return state
-    }
-}
-
+    default:
+      return state;
+  }
+};
