@@ -7,14 +7,14 @@ import { IPanesState, IPanesNamespaceState } from './reducers';
 export const panesNamespaceSelector = <Data>(
   state: IPanesState<Data>,
   namespace: string,
-): IPanesNamespaceState<Data> | void => state[namespace];
+): IPanesNamespaceState<Data> | undefined => state[namespace];
 
 /**
  * Select current pane in pane collection.
  */
 export const panesNsCurrentPaneSelector = <Data>(
   panes: Array<IPane<Data>>,
-): IPane<Data> | void => panes.find(pane => pane.isCurrent);
+): IPane<Data> | undefined => panes.find(pane => pane.isCurrent);
 
 /**
  * Select current pane for a given namespace.
@@ -22,7 +22,7 @@ export const panesNsCurrentPaneSelector = <Data>(
 export const panesCurrentPaneSelector = <Data>(
   state: IPanesState<Data>,
   namespace: string,
-): IPane<Data> | void => {
+): IPane<Data> | undefined => {
   const namespaceState = panesNamespaceSelector(state, namespace);
   if (namespaceState === undefined) return;
 
@@ -35,7 +35,7 @@ export const panesCurrentPaneSelector = <Data>(
 export const panesNsPaneSelector = <Data>(
   panes: Array<IPane<Data>>,
   paneId: string,
-): IPane<Data> | void => panes.find(pane => pane.id === paneId);
+): IPane<Data> | undefined => panes.find(pane => pane.id === paneId);
 
 /**
  * Select a pane by its id for a given namespace.
@@ -44,7 +44,7 @@ export const panesPaneSelector = <Data>(
   state: IPanesState<Data>,
   namespace: string,
   paneId: string,
-): IPane<Data> | void => {
+): IPane<Data> | undefined => {
   const namespaceState = panesNamespaceSelector(state, namespace);
   if (namespaceState === undefined) return;
 
@@ -62,8 +62,8 @@ export interface IPanesContentSelection<Data> {
 export const panesNsContentSelector = <Data>(
   panes: Array<IPane<Data>>,
   contentId: string,
-): IPanesContentSelection<Data> | void => {
-  let selection: IPanesContentSelection<Data> | void;
+): IPanesContentSelection<Data> | undefined => {
+  let selection: IPanesContentSelection<Data> | undefined;
   panes.forEach(pane => {
     const content = pane.contents.find(c => c.id === contentId);
     if (content !== undefined) {
@@ -71,7 +71,7 @@ export const panesNsContentSelector = <Data>(
     }
   });
 
-  return selection!;
+  return selection;
 };
 
 /**
@@ -81,7 +81,7 @@ export const panesContentSelector = <Data>(
   state: IPanesState<Data>,
   namespace: string,
   contentId: string,
-): IPanesContentSelection<Data> | void => {
+): IPanesContentSelection<Data> | undefined => {
   const namespaceState = panesNamespaceSelector(state, namespace);
   if (namespaceState === undefined) return;
 
