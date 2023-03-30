@@ -11,7 +11,7 @@
       "~/*": ["*"],
       "edikit": ["edikit"]
     },
-    "jsx": "react",
-    "include": ["**/*.ts", "**/*.tsx"]
-  }
+    "jsx": "react"
+  },
+  "include": ["**/*.ts", "**/*.tsx"]
 }
